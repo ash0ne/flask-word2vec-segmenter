@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}Upload File{% endblock %} {% block
+content %}
+<h4 class="mb-4">Upload a CSV file with the training data to upload</h4>
+<form method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <div class="custom-file">
+      <input
+        type="file"
+        class="custom-file-input"
+        id="file"
+        name="file"
+        accept=".csv"
+        required
+        onchange="updateFileName()"
+      />
+      <label class="custom-file-label" id="file-label" for="file"
+        >Choose file...</label
+      >
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="uploadBtn" disabled>
+    Upload
+  </button>
+</form>
+
+<script>
+  document.getElementById("file").addEventListener("change", function () {
+    const uploadBtn = document.getElementById("uploadBtn");
+    const file = this.files[0];
+    if (file && file.name.endsWith(".csv")) {
+      uploadBtn.disabled = false;
+    } else {
+      uploadBtn.disabled = true;
+      alert("Invalid file format. Please upload a .csv file.");
+    }
+  });
+
+  function updateFileName() {
+    var input = document.getElementById("file");
+    var label = document.getElementById("file-label");
+    var fileName = input.files[0].name;
+    if (fileName.endsWith(".csv")) label.innerHTML = fileName;
+  }
+</script>
+{% endblock %}
