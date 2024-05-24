@@ -1,5 +1,8 @@
 # flask-word2vec-segmenter
 
+![CI Status Badge](https://github.com/ash0ne/flask-word2vec-segmenter/actions/workflows/ci.yml/badge.svg)
+![GitHub License](https://img.shields.io/github/license/ash0ne/flask-word2vec-segmenter)
+
 This is a Flask-based web application that leverages Word2Vec to perform item segmentation based on the uploaded training data.
 I put this together while on a couch watching TV at 1 AM so it scales as terribly as you expect it to as the traning data size increases.
 
