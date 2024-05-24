@@ -31,7 +31,7 @@
   },
   "name": "flask-word2vec-segmenter",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0-beta.1",
   "description": "An minimalist word2vec segmenter with a basic UI to train and finetune the model.",
   "author": "ash0ne",
   "license": "MIT",
