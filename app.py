@@ -4,9 +4,8 @@ from gensim.models import Word2Vec
 import os
 import csv
 
-
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "your_secret_key"
+app.config["SECRET_KEY"] = "everyone-loves-some-python-every-so-0ften"
 app.config["UPLOAD_FOLDER"] = "uploads"
 model = None
 window = 40
@@ -62,6 +61,7 @@ def delete_file(filename):
         flash("File not found", "danger")
     return redirect(url_for("index"))
 
+
 @app.route("/tune", methods=["GET", "POST"])
 @auth.login_required
 def tune_model():
@@ -74,18 +74,41 @@ def tune_model():
         negative = int(request.form["negative"])
         workers = int(request.form["workers"])
         seed = int(request.form["seed"])
-        flash("Model parameters updated successfully. Do not forget to re-train.", "success")
+        flash(
+            "Model parameters updated successfully. Do not forget to re-train.",
+            "success",
+        )
         return redirect(url_for("index"))
-    return render_template("tune_model.html", username=auth.username(), window=window, min_count=min_count, sg=sg, hs=hs, negative=negative, workers=workers, seed=seed)
+    return render_template(
+        "tune_model.html",
+        username=auth.username(),
+        window=window,
+        min_count=min_count,
+        sg=sg,
+        hs=hs,
+        negative=negative,
+        workers=workers,
+        seed=seed,
+    )
 
-@app.route("/train/<filename>")  # Ensure this route is correctly defined
+
+@app.route("/train/<filename>")
 @auth.login_required
 def train_file(filename):
     global model, window, min_count, sg, hs, negative, workers, seed
-    with open(app.config["UPLOAD_FOLDER"]+"/"+filename, 'r') as file:
+    with open(app.config["UPLOAD_FOLDER"] + "/" + filename, "r") as file:
         reader = csv.reader(file)
         data = [[item.strip() for item in row] for row in reader]
-        model = Word2Vec(data, window=window ,min_count=min_count,sg=sg,hs=hs, negative=negative, workers=workers, seed=seed)
+        model = Word2Vec(
+            data,
+            window=window,
+            min_count=min_count,
+            sg=sg,
+            hs=hs,
+            negative=negative,
+            workers=workers,
+            seed=seed,
+        )
         flash(f"Model trained on {filename}", "success")
         return redirect(url_for("index"))
 
@@ -94,13 +117,21 @@ def train_file(filename):
 @auth.login_required
 def api_get_alikes():
     if model is None:
-        return jsonify({"error": "Model not trained yet. Choose your dataset to train model on."}), 400
+        return (
+            jsonify(
+                {
+                    "error": "Model not trained yet. Choose your dataset to train model on."
+                }
+            ),
+            400,
+        )
     query = request.args.get("query")
     if not query:
-        return jsonify({"error": "Missing query parameter"}), 400 
+        return jsonify({"error": "Missing query parameter"}), 400
     else:
         related_items = find_related_items(query)
         return jsonify({"related_items": related_items})
+
 
 def find_related_items(prompt):
     global model
@@ -109,6 +140,7 @@ def find_related_items(prompt):
     similar_words = model.wv.most_similar(prompt, topn=5)
     # Return only the words, not their similarity scores
     return [word for word, similarity in similar_words]
+
 
 if __name__ == "__main__":
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
