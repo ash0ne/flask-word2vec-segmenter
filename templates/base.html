@@ -1,64 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Flask App{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      .navbar-brand .fa-home {
+        color: #aaa;
+        /* Non-active color */
+      }
+      .navbar-brand.active .fa-home {
+        color: #fff;
+        /* Active color */
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Flask App{% endblock %}</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  <!-- Font Awesome CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <style>
-    .navbar-brand .fa-home {
-      color: #aaa;
-      /* Non-active color */
-    }
+  <body class="{% block body_class %}light-mode{% endblock %}">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a
+        class="navbar-brand {% if request.path == url_for('index') %}active{% endif %}"
+        href="{{ url_for('index') }}"
+        ><i class="fas fa-home"></i
+      ></a>
 
-    .navbar-brand.active .fa-home {
-      color: #fff;
-      /* Active color */
-    }
-  </style>
-</head>
-
-<body class="{% block body_class %}light-mode{% endblock %}">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}"><i
-        class="fas fa-home"></i></a>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item {% if request.path == url_for('upload_file') %}active{% endif %}">
-          <a class="nav-link" href="{{ url_for('upload_file') }}">Upload Data</a>
-        </li>
-        <li class="nav-item {% if request.path == url_for('tune_model') %}active{% endif %}">
-          <a class="nav-link" href="{{ url_for('tune_model') }}">Tune Model</a>
-        </li>
-      </ul>
-      <span class="navbar-text"> Hello {{ username }}! </span>
-    </div>
-  </nav>
-  <div class="container mt-4">
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
       </button>
-    </div>
-    {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
-  </div>
-  <!-- Bootstrap JS imports -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
 
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li
+            class="nav-item {% if request.path == url_for('upload_file') %}active{% endif %}"
+          >
+            <a class="nav-link" href="{{ url_for('upload_file') }}"
+              >Upload Data</a
+            >
+          </li>
+          <li
+            class="nav-item {% if request.path == url_for('tune_model') %}active{% endif %}"
+          >
+            <a class="nav-link" href="{{ url_for('tune_model') }}"
+              >Tune Model</a
+            >
+          </li>
+        </ul>
+        <span class="navbar-text"> Hello {{ username }}! </span>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </div>
+    <!-- Bootstrap JS imports -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
 </html>

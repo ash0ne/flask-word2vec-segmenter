@@ -1,7 +1,6 @@
 # flask-word2vec-segmenter
 
 This is a Flask-based web application that leverages Word2Vec to perform item segmentation based on the uploaded training data.
-
 I put this together while on a couch watching TV at 1 AM so it scales as terribly as you expect it to as the traning data size increases.
 
 ## Overview
@@ -10,7 +9,7 @@ The application uses the Word2Vec model from the Gensim library to train on uplo
 
 ## Features
 
-- **User Authentication**: The application uses HTTP Basic Authentication to protect its routes. The default username and password are set to "admin" and "adminpass" respectively, but these can be overridden by setting the `APP_USER` and `APP_PASSWORD` environment variables.
+- **User Authentication**: The application uses HTTP Basic Authentication to protect its routes. The default username and password are set to "admin" and "adminpass" respectively, but these can be overridden by setting the `APP_USER` and `APP_PASSWORD` environment variables while running locally or when using Docker.
 
 - **File Upload**: You can upload CSV files to be used as training data for the Word2Vec model in the `Upload Data` section. The uploaded files are stored in the "uploads" directory.
 
@@ -24,6 +23,14 @@ The application uses the Word2Vec model from the Gensim library to train on uplo
 2. Install the required Python packages by running `pip install -r requirements.txt`.
 3. Run the application by executing `python app.py` or `python3 app.py`.
 4. Open a web browser and navigate to `http://localhost:5000`.
+
+## Using Docker
+
+Run the below command and you should be up and running
+
+```
+docker run -p5000:5000 ghcr.io/ash0ne/flask-word2vec-segmenter:latest
+```
 
 ## License
 
