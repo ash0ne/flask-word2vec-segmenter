@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block title %}Tune Model{% endblock %} {% block
+content %}
+<h4 class="mb-4">Tune Model Parameters</h4>
+<form method="POST">
+    <div class="form-group row">
+        <label for="window" class="col-md-2 col-form-label">Window</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="window" name="window" value="{{ window }}" required>
+            <small id="windowHelp" class="form-text text-muted">Maximum distance between the current and predicted word
+                within a sentence.</small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="min_count" class="col-md-2 col-form-label text-info">Min Count</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="min_count" name="min_count" value="{{ min_count }}" required>
+            <small id="min_countHelp" class="form-text text-muted">Ignores all words with total frequency lower than
+                this.</small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="sg" class="col-md-2 col-form-label">SG</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="sg" name="sg" value="{{ sg }}" required>
+            <small id="sgHelp" class="form-text text-muted">Training algorithm: 1 for skip-gram; otherwise CBOW.</small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hs" class="col-md-2 col-form-label">HS</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="hs" name="hs" value="{{ hs }}" required>
+            <small id="hsHelp" class="form-text text-muted">If 1, hierarchical softmax will be used for model training.
+                If set to 0, and negative is non-zero, negative sampling will be used.</small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="negative" class="col-md-2 col-form-label">Negative</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="negative" name="negative" value="{{ negative }}" required>
+            <small id="negativeHelp" class="form-text text-muted">If > 0, negative sampling will be used, the int for
+                negative specifies how many "noise words" should be drawn (usually between 5-20).</small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="workers" class="col-md-2 col-form-label">Workers</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="workers" name="workers" value="{{ workers }}" required>
+            <small id="workersHelp" class="form-text text-muted">Use these many worker threads to train the model
+                (=faster training with multicore machines).</small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="seed" class="col-md-2 col-form-label">Seed</label>
+        <div class="col-md-7">
+            <input type="number" class="form-control" id="seed" name="seed" value="{{ seed }}" required>
+            <small id="seedHelp" class="form-text text-muted">Seed for the random number generator to make the word2vec
+                reproducible.</small>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Parameters</button>
+</form>
+{% endblock %}

@@ -1,10 +1,21 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 from flask_httpauth import HTTPBasicAuth
+from gensim.models import Word2Vec
 import os
+import csv
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your_secret_key"
 app.config["UPLOAD_FOLDER"] = "uploads"
+model = None
+window = 40
+min_count = 1
+sg = 0
+hs = 1
+negative = 10
+workers = 2
+seed = 34
 
 # Environment variables for user credentials
 APP_USER = os.environ.get("APP_USER", "admin")
@@ -51,28 +62,53 @@ def delete_file(filename):
         flash("File not found", "danger")
     return redirect(url_for("index"))
 
+@app.route("/tune", methods=["GET", "POST"])
+@auth.login_required
+def tune_model():
+    global window, min_count, sg, hs, negative, workers, seed
+    if request.method == "POST":
+        window = int(request.form["window"])
+        min_count = int(request.form["min_count"])
+        sg = int(request.form["sg"])
+        hs = int(request.form["hs"])
+        negative = int(request.form["negative"])
+        workers = int(request.form["workers"])
+        seed = int(request.form["seed"])
+        flash("Model parameters updated successfully. Do not forget to re-train.", "success")
+        return redirect(url_for("index"))
+    return render_template("tune_model.html", username=auth.username(), window=window, min_count=min_count, sg=sg, hs=hs, negative=negative, workers=workers, seed=seed)
 
 @app.route("/train/<filename>")  # Ensure this route is correctly defined
 @auth.login_required
 def train_file(filename):
-    # Add your training logic here
-    flash(f"Model trained on {filename}", "success")
-    return redirect(url_for("index"))
+    global model, window, min_count, sg, hs, negative, workers, seed
+    with open(app.config["UPLOAD_FOLDER"]+"/"+filename, 'r') as file:
+        reader = csv.reader(file)
+        data = [[item.strip() for item in row] for row in reader]
+        model = Word2Vec(data, window=window ,min_count=min_count,sg=sg,hs=hs, negative=negative, workers=workers, seed=seed)
+        flash(f"Model trained on {filename}", "success")
+        return redirect(url_for("index"))
 
 
-@app.route("/api/substitutes")
+@app.route("/api/alikes")
 @auth.login_required
-def api_get_first_file_contents():
-    query = request.args.get("query")  # Get the query parameter from the request
-    files = [f for f in os.listdir(app.config["UPLOAD_FOLDER"]) if f.endswith(".csv")]
-    if files:
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], files[0])
-        with open(file_path, "r") as file:
-            contents = file.read()
-        return jsonify({"query": query, "file_contents": contents})
+def api_get_alikes():
+    if model is None:
+        return jsonify({"error": "Model not trained yet. Choose your dataset to train model on."}), 400
+    query = request.args.get("query")
+    if not query:
+        return jsonify({"error": "Missing query parameter"}), 400 
     else:
-        return jsonify({"error": "No .csv files found in the uploads directory"})
+        related_items = find_related_items(query)
+        return jsonify({"related_items": related_items})
 
+def find_related_items(prompt):
+    global model
+    if prompt not in model.wv:
+        return []
+    similar_words = model.wv.most_similar(prompt, topn=5)
+    # Return only the words, not their similarity scores
+    return [word for word, similarity in similar_words]
 
 if __name__ == "__main__":
     if not os.path.exists(app.config["UPLOAD_FOLDER"]):
