@@ -1,5 +1,8 @@
 # flask-word2vec-segmenter
 
+![CI Status Badge](https://github.com/ash0ne/flask-word2vec-segmenter/actions/workflows/ci.yml/badge.svg)
+![GitHub License](https://img.shields.io/github/license/ash0ne/flask-word2vec-segmenter)
+
 This is a Flask-based web application that leverages Word2Vec to perform item segmentation based on the uploaded training data.
 I put this together while on a couch watching TV at 1 AM so it scales as terribly as you expect it to as the traning data size increases.
 
@@ -17,7 +20,7 @@ The application uses the Word2Vec model from the Gensim library to train on uplo
 
 - **Item Segmentation**: Once the model is trained, users can input a query to the GET API like `http://localhost:5000/api/alikes?query=<query>`, and the application will return a list of items that are semantically similar to the input query.
 
-## Usage
+## Running Locally
 
 1. Clone the repository and navigate to the project directory.
 2. Install the required Python packages by running `pip install -r requirements.txt`.
@@ -26,7 +29,7 @@ The application uses the Word2Vec model from the Gensim library to train on uplo
 
 ## Using Docker
 
-Run the below command and you should be up and running
+Run the below command and you should be up and running.
 
 ```
 docker run -p5000:5000 ghcr.io/ash0ne/flask-word2vec-segmenter:latest
