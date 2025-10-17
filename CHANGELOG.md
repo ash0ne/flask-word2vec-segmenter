@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ash0ne/flask-word2vec-segmenter/compare/v1.0.0...v1.1.0) (2025-10-17)
+
+
+### Features
+
+* Upgrade Werkzeug, MarkupSafe and Packaging ([#42](https://github.com/ash0ne/flask-word2vec-segmenter/issues/42)) ([6a43dac](https://github.com/ash0ne/flask-word2vec-segmenter/commit/6a43daccd05c9ef1084913c04a9804f7f7cf0c51))
+
 # 1.0.0 (2024-05-24)
 
 
